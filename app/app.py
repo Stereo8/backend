@@ -8,6 +8,7 @@ def create_app(debug=False):
     app = Flask(__name__)
     CORS(app)
     app.register_blueprint(main_view.teams)
+    app.register_blueprint(main_view.members)
     app.debug = debug
 
     return app
@@ -15,4 +16,4 @@ def create_app(debug=False):
 
 if __name__ == "__main__":
     app = create_app(debug=True)
-    app.run(host='0.0.0.0')
+    app.run(host='localhost')

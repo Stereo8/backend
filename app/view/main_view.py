@@ -1,8 +1,9 @@
 from flask import Blueprint, request, jsonify
 
 from controller.main_controller import get_all_teams, create_team, get_team, update_team, delete_team
-
+from controller.member_controller import get_member, update_member, delete_member
 teams = Blueprint('teams', __name__, url_prefix='/teams')
+members = Blueprint('members', __name__, url_prefix='/members')
 
 
 @teams.route('/hello', methods=['GET'])
@@ -21,7 +22,10 @@ def teams_view():
     if request.method == 'POST':  # create a new team
         # mention validation issues
         body = request.json
-        created = create_team(body)
+        try:
+            created = create_team(body)
+        except ValueError:
+            return 'Broj clanova mora biti 3 ili 4', 400
         return jsonify(created), 201
 
 
@@ -50,3 +54,31 @@ def single_team_view(team_uuid):
             return jsonify({'error': 'team with unique id {} not found'.format(team_uuid)}), 404
 
         return jsonify({}), 204
+
+
+@members.route('/<int:member_id>', methods=['GET', 'PUT', 'DELETE'])
+def member_view(member_id):
+    if request.method == 'GET':
+        try:
+            member = get_member(member_id)
+        except FileNotFoundError:
+            return 'Clan sa ovim idijem ne postoji u bazi', 404
+
+        return jsonify(member.to_dict()), 200
+
+    if request.method == 'PUT':
+        json = request.json
+        member = update_member(member_id, json)
+        return 'asdasd', 200
+
+    if request.method == 'DELETE':
+        status = delete_member(member_id)
+
+        if status == 400:
+            return ('Ne sme biti manje od 3 clana u timu', 400)
+        if status == 204:
+            return jsonify({}), 204
+
+
+
+

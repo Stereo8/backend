@@ -4,7 +4,7 @@ import uuid
 from model.team import Team
 from model.team_member import TeamMember
 
-DB_PATH = '../db/hzs.db'  # can do abs path too!
+DB_PATH = '..\\db\\hzs.db'  # can do abs path too!
 
 
 def _connect():
@@ -64,8 +64,7 @@ def get_team(team_uuid):
     members = c.fetchall()
 
     for m in members:
-        created_member = TeamMember(id=m[0], first_name=m[1], last_name=m[2], email=m[3], phone_number=m[4],
-                                    school=m[5], city=m[6], team=created_team)
+        created_member = TeamMember(id=m[0], first_name=m[1], last_name=m[2], email=m[3], phone_number=m[4], school=m[5], city=m[6], team=created_team)
         created_team.add_member(created_member)
 
     conn.commit()
@@ -85,6 +84,9 @@ def create_team(data):
     team_id = c.lastrowid
     data['id'] = team_id
     data['team_uuid'] = team_uuid
+
+    if len(data['team_members']) > 4 or len(data['team_members']) < 3:
+        raise ValueError
 
     for m in data['team_members']:
         member_query = """INSERT INTO team_member (first_name, last_name, email, phone_number, school, city, team_id) 
