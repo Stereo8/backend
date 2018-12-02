@@ -34,9 +34,9 @@ def update_member(member_id, data):
         team_member WHERE id=?"""
     c.execute(query, (member_id,))
 
-    update_query = """UPDATE team_member SET first_name=?, last_name=?, email=?, phone_number=?, school=?, city=?"""
+    update_query = """UPDATE team_member SET first_name=?, last_name=?, email=?, phone_number=?, school=?, city=? WHERE id=?"""
 
-    c.execute(update_query, (data['first_name'], data['last_name'], data['email'], data['phone_number'], data['school'], data['city']))
+    c.execute(update_query, (data['first_name'], data['last_name'], data['email'], data['phone_number'], data['school'], data['city'], member_id))
 
     c.execute(query, (member_id,))
     member_row = c.fetchone()

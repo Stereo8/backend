@@ -4,7 +4,7 @@ from flask_cors import CORS
 from view import main_view
 
 
-def create_app(debug=False):
+def create_app(debug=True):
     app = Flask(__name__)
     CORS(app)
     app.register_blueprint(main_view.teams)
@@ -15,5 +15,5 @@ def create_app(debug=False):
 
 
 if __name__ == "__main__":
-    app = create_app(debug=True)
+    app = create_app()
     app.run(host='localhost')

@@ -111,12 +111,13 @@ def update_team(data, uuid):
 
     c.execute(team_query, (data['name'], data['description'], data['photo_url'], uuid))
 
-    for m in data['team_members']:
-        member_query = """INSERT INTO team_member (first_name, last_name, email, phone_number, school, city, team_id) 
-        VALUES (?,?,?,?,?,?,?)"""
-        c.execute(member_query,
-                  (m['first_name'], m['last_name'], m['email'], m['phone_number'], m['school'], m['city'], data['id']))
-        m['id'] = c.lastrowid
+    if 'team_members' in data:
+        for m in data['team_members']:
+            member_query = """INSERT INTO team_member (first_name, last_name, email, phone_number, school, city, team_id) 
+            VALUES (?,?,?,?,?,?,?)"""
+            c.execute(member_query,
+                      (m['first_name'], m['last_name'], m['email'], m['phone_number'], m['school'], m['city'], data['id']))
+            m['id'] = c.lastrowid
 
     conn.commit()
     c.close()
